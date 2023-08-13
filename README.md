@@ -2,6 +2,12 @@
 ```bash
 cargo run -- --NGROK_AUTHTOKEN <AUTH_TOKEN_FROM_NGROK_DASHBOARD>
 ```
+#### Alternative for windows / powershell
+```powershell
+#set session long env variable
+ $env:NGROK_AUTHTOKEN = "AUTH_TOKEN"
+ cargo run 
+```
 [https://dashboard.ngrok](https://dashboard.ngrok.com/get-started/your-authtoken)
 
 [Ngrok -rs DOCS](https://ngrok.com/docs/using-ngrok-with/rust/)
