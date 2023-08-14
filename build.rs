@@ -28,19 +28,18 @@ fn main() {
         .output()
         .expect("failed to run dot");
 
-    //Latest dependency graph
-    std::fs::write(&depgraph_filename, dot.stdout)
-        .expect("failed to write Depgraph to output file");
+    cleanup_old_depgraphs();
 
-    cleanup_old_depgraphs(depgraph_filename);
+    //Latest dependency graph
+    std::fs::write(depgraph_filename, dot.stdout).expect("failed to write Depgraph to output file");
 }
 
-fn cleanup_old_depgraphs(depgraph_filename: String) {
-    let _ = fs::read_dir(Path::new("."))//current dir
+fn cleanup_old_depgraphs() {
+    let _ = fs::read_dir(Path::new("."))
         .unwrap()
         .filter_map(|file| {
             let file_name = file.unwrap().file_name().into_string().unwrap();
-            if file_name.starts_with("depGraph") && file_name != depgraph_filename {
+            if file_name.starts_with("depGraph") {
                 Some(file_name)
             } else {
                 None
