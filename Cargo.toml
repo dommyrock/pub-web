@@ -9,6 +9,7 @@ edition = "2021"
 axum = "0.6.20"
 ngrok = { version = "0.12.4", features = ["axum"] }
 tokio = { version = "1.31.0", features = ["rt-multi-thread", "macros"] }
+anyhow = "1.0.56"
 
 [build-dependencies]
 chrono = "0.4.26"
