@@ -40,12 +40,15 @@ fn cleanup_old_depgraphs() {
     fs::read_dir(Path::new("."))
         .unwrap()
         .filter_map(|file| {
-            let file_name = file.unwrap().file_name().into_string().unwrap();
-            if file_name.starts_with("depGraph") {
-                Some(file_name)
-            } else {
-                None
-            }
+            file.ok().and_then(|file| {
+                file.file_name().into_string().ok().and_then(|file_name| {
+                    if file_name.starts_with("depGraph") {
+                        Some(file_name)
+                    } else {
+                        None
+                    }
+                })
+            })
         })
         .collect::<Vec<String>>()
         .into_iter()
