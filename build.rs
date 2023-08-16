@@ -28,13 +28,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     cleanup_old_depgraphs();
 
-    //Latest dependency graph
-    std::fs::write(depgraph_filename, dot.stdout).expect("failed to write Depgraph to output file");
+    //Generate new dependency graph
+    std::fs::write(&depgraph_filename, dot.stdout).expect(&format!(
+        "Failed to write Depgraph to output file {}",
+        depgraph_filename
+    ));
     Ok(())
 }
 
 fn cleanup_old_depgraphs() {
-    let _ = fs::read_dir(Path::new("."))
+    fs::read_dir(Path::new("."))
         .unwrap()
         .filter_map(|file| {
             let file_name = file.unwrap().file_name().into_string().unwrap();
@@ -45,13 +48,13 @@ fn cleanup_old_depgraphs() {
             }
         })
         .collect::<Vec<String>>()
-        .iter()
+        .into_iter()
         .for_each(|f| {
             fs::remove_file(f).unwrap();
         });
 }
 
-///Terminates process if 'depgraph' cmd is not installed
+///Terminates the process if one of required commands is not installed
 fn are_build_deps_installed() -> Result<(), Box<dyn std::error::Error>> {
     let depgraph = Command::new("cargo")
         .arg("depgraph")
