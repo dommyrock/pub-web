@@ -13,14 +13,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let date_today = format!("{}_{}_{}", now.month(), now.day(), now.year());
     let depgraph_filename = format!("depGraph-{}.svg", date_today);
 
-    let _ = are_build_deps_installed();
-
+    
     // Run the post-build command
+    check_build_deps();
     let cargo = Command::new("cargo")
         .args(&["depgraph", "--all-deps"])
         .stdout(Stdio::piped())
         .spawn()?;
-
     let dot = Command::new("dot")
         .arg("-Tsvg")
         .stdin(cargo.stdout.unwrap())
@@ -57,24 +56,19 @@ fn cleanup_old_depgraphs() {
         });
 }
 
-///Terminates the process if one of required commands is not installed
-fn are_build_deps_installed() -> Result<(), Box<dyn std::error::Error>> {
-    let depgraph = Command::new("cargo")
-        .arg("depgraph")
-        .output()?
-        .status
-        .success();
-
-    if !depgraph {
-        eprint!("please install tool 'depgraph' https://github.com/jplatte/cargo-depgraph/\ncargo install cargo-depgraph");
-        std::process::exit(1)
+///Terminates process if one of the executables is missing on the system
+fn check_build_deps() {
+    if let Ok(output) = Command::new("cargo").arg("depgraph").output() {
+        if !output.status.success() {
+            eprintln!("please install tool 'depgraph' https://github.com/jplatte/cargo-depgraph/\ncargo install cargo-depgraph");
+            std::process::exit(1)
+        }
     }
 
-    let graphviz = Command::new("dot").arg("-V").output()?.status.success();
-
-    if !graphviz {
-        eprint!("please install tool 'graphviz' https://graphviz.org/download/");
-        std::process::exit(1)
+    if let Ok(output) = Command::new("dot").arg("-V").output() {
+        if !output.status.success() {
+            eprintln!("please install tool 'graphviz' https://graphviz.org/download/");
+            std::process::exit(1)
+        }
     }
-    Ok(())
 }
