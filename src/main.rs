@@ -5,7 +5,7 @@ use std::error::Error;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     // build our application with a route
-    let app = Router::new().route("/", get(|| async { "🚀 from ngrok-rust!" }));
+    let app = Router::new().route("/", get(|| async { "🚀 from ngrok-rust ! ! !" }));
 
     // listen on ngrok ingress (i.e. https://myapp.ngrok.dev)
     let listener = ngrok::Session::builder()
