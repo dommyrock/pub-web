@@ -7,12 +7,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // build our application with a route
     let app = Router::new().route("/", get(|| async { "🚀 from ngrok-rust!" }));
 
-    // listen on localhost:8000
-    // axum::Server::bind(&"0.0.0.0:8000".parse().unwrap())
-    //  .serve(app.into_make_service())
-    //  .await?;
-    // Ok(())
-
     // listen on ngrok ingress (i.e. https://myapp.ngrok.dev)
     let listener = ngrok::Session::builder()
         .authtoken_from_env()
