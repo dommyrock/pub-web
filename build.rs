@@ -13,7 +13,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let date_today = format!("{}_{}_{}", now.month(), now.day(), now.year());
     let depgraph_filename = format!("depGraph-{}.svg", date_today);
 
-    
     // Run the post-build command
     check_build_deps();
     let cargo = Command::new("cargo")
