@@ -35,11 +35,15 @@ I hope this helps! Let me know if you have any questions or need further assista
 ---
 ### 2nd Alternative is to use JS NPM
 
-npm install -g localtunnel
+
 ```bash
+#Get localtunnel npm
+npm install -g localtunnel
+
 #run my backend
-cargo run 
-#expose publicaly through proxy server
+cargo run
+
+#expose publicly through proxy server
 lt --port 8080 --subdomain yoursubdomain
 ```
 https://github.com/localtunnel/localtunnel
